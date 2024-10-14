@@ -132,10 +132,10 @@ begin
   CriarSubPasta(cCaminhoPastaPrincipal, 'Scripts SQL');
 
   cCaminhoSubPasta := CriarSubPasta(cCaminhoPastaPrincipal, 'Textos Form DEV');
-  CriarSubPasta(cCaminhoSubPasta, pcProjeto + 'Form DEV');
+  CriarArquivoTxT(cCaminhoSubPasta, pcProjeto + 'Form DEV');
 
   cCaminhoSubPasta := CriarSubPasta(cCaminhoPastaPrincipal, 'Textos Form HOM');
-  CriarSubPasta(cCaminhoSubPasta, pcProjeto + 'Form HOM');
+  CriarArquivoTxT(cCaminhoSubPasta, pcProjeto + 'Form HOM');
 end;
 
 procedure TfrmCriarPastaProjeto.Validar(lCondicao: Boolean; cMensagem: String; oComponente: TWinControl);
