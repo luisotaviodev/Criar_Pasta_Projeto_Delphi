@@ -16,16 +16,16 @@ File_13=TSourceModule,'C:\Projetos\YzidroXE\Yz003\branch\Framework\untFrameBase.
 File_14=TSourceModule,'C:\Projetos\YzidroXE\Yz003\branch\Framework\untFramePainelRetratil.pas',0,1,1,1,1,0,0,,
 
 [Modules]
-Module0=C:\Users\devmv\Desktop\Criar_Pasta_Projeto\untPrincipal.pas
+Module0=C:\Users\devmv\Desktop\Meus Projetos Pessoais Delphi\Criar_Pasta_Projeto\untPrincipal.pas
 Count=1
 EditWindowCount=1
 
-[C:\Users\devmv\Desktop\Criar_Pasta_Projeto\untPrincipal.pas]
+[C:\Users\devmv\Desktop\Meus Projetos Pessoais Delphi\Criar_Pasta_Projeto\untPrincipal.pas]
 ModuleType=TSourceModule
 
 [EditWindow0]
 ViewCount=1
-CurrentEditView=C:\Users\devmv\Desktop\Criar_Pasta_Projeto\untPrincipal.pas
+CurrentEditView=C:\Users\devmv\Desktop\Meus Projetos Pessoais Delphi\Criar_Pasta_Projeto\untPrincipal.pas
 View0=0
 PercentageSizes=1
 Create=1
@@ -56,14 +56,14 @@ BottomMiddelPanelData=0000080001020200000009000000446F636B5369746530100000004772
 
 [View0]
 CustomEditViewType=TEditView
-Module=C:\Users\devmv\Desktop\Criar_Pasta_Projeto\untPrincipal.pas
-CursorX=15
-CursorY=172
-TopLine=32
+Module=C:\Users\devmv\Desktop\Meus Projetos Pessoais Delphi\Criar_Pasta_Projeto\untPrincipal.pas
+CursorX=44
+CursorY=121
+TopLine=105
 LeftCol=1
 Elisions=
 Bookmarks=
-EditViewName=Borland.FormDesignerView
+EditViewName=C:\Users\devmv\Desktop\Meus Projetos Pessoais Delphi\Criar_Pasta_Projeto\untPrincipal.pas
 
 [UndockedDesigner]
 Count=0
@@ -253,8 +253,8 @@ SplitPos=112
 
 [PropInspDesignerSelection]
 ArrangeBy=Name
-SelectedItem=Action,OnKeyPress
-ExpandedItems=Anchors=0,BorderIcons=0,Constraints=0,Caret=0,Font=0,GlassFrame=0,LiveBindings=0,BevelEdges=0,"LiveBindings Designer=0",Margins=0,StyleElements=0,Touch=0,ImageMargins=0,HorzScrollBar=0,Padding=0,VertScrollBar=0
+SelectedItem=Action,
+ExpandedItems=Anchors=0,BorderIcons=0,Constraints=0
 
 [ClassBrowserTool]
 PercentageSizes=1
@@ -731,5 +731,5 @@ Dockable=1
 StayOnTop=0
 TabPosition=1
 ActiveTabID=PropertyInspector
-TabDockClients=PropertyInspector,StructureView,ProjectManager,ToolForm,TFileExplorerForm,TemplateView,ClassBrowserTool,ModelViewTool,DataExplorerContainer,frmDesignPreview
+TabDockClients=PropertyInspector,StructureView,ProjectManager,ToolForm,TFileExplorerForm,ClassBrowserTool,TemplateView,frmDesignPreview,ModelViewTool,DataExplorerContainer
 

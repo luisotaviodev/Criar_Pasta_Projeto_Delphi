@@ -116,27 +116,40 @@ end;
 procedure TfrmCriarPastaProjeto.CriarPasta;
 var
   cCaminhoPastaPrincipal, cCaminhoSubPasta: String;
+  Pasta, SubPasta: String;
+  PastasESubPastas: array of array of String;
+  i, j: Integer;
 begin
   cCaminhoPastaPrincipal := CriarPastaPrincipal;
+  PastasESubPastas := [
+                       ['Docs', 'Prints']
+                      ,['Imagens Adicionadas No Projeto']
+                      ,['Referencias', 'Prints', 'Tabelas']
+                      ,['Scripts SQL']
+                      ,['Textos Form DEV']
+                      ,['Textos Form HOM']
+                      ];
 
-  cCaminhoSubPasta := CriarSubPasta(cCaminhoPastaPrincipal, 'Docs');
-  CriarSubPasta(cCaminhoSubPasta, 'Prints');
-  CriarArquivoTxT(cCaminhoSubPasta, 'Link do Docs');
+  for i := Low(PastasESubPastas) to High(PastasESubPastas) do
+  begin
+    Pasta := PastasESubPastas[i][0];
+    cCaminhoSubPasta := CriarSubPasta(cCaminhoPastaPrincipal, Pasta);
 
-  CriarSubPasta(cCaminhoPastaPrincipal, 'Imagens Adicionadas No Projeto');
+    if Pasta = 'Textos Form DEV' then
+      CriarArquivoTxT(cCaminhoSubPasta, pcProjeto + 'Form DEV')
+    else if Pasta = 'Textos Form HOM' then
+      CriarArquivoTxT(cCaminhoSubPasta, pcProjeto + 'Form HOM');
 
-  cCaminhoSubPasta := CriarSubPasta(cCaminhoPastaPrincipal, 'Referencias');
-  CriarSubPasta(cCaminhoSubPasta, 'Prints');
-  CriarSubPasta(cCaminhoSubPasta, 'Tabelas');
+    for j := 1 to High(PastasESubPastas[i]) do
+    begin
+      SubPasta := PastasESubPastas[i][j];
+      CriarSubPasta(cCaminhoSubPasta, SubPasta);
+    end;
+  end;
 
-  CriarSubPasta(cCaminhoPastaPrincipal, 'Scripts SQL');
-
-  cCaminhoSubPasta := CriarSubPasta(cCaminhoPastaPrincipal, 'Textos Form DEV');
-  CriarArquivoTxT(cCaminhoSubPasta, pcProjeto + 'Form DEV');
-
-  cCaminhoSubPasta := CriarSubPasta(cCaminhoPastaPrincipal, 'Textos Form HOM');
-  CriarArquivoTxT(cCaminhoSubPasta, pcProjeto + 'Form HOM');
+  CriarArquivoTxT(CriarSubPasta(cCaminhoPastaPrincipal, 'Docs'), 'Link do Docs');
 end;
+
 
 procedure TfrmCriarPastaProjeto.Validar(lCondicao: Boolean; cMensagem: String; oComponente: TWinControl);
 begin
