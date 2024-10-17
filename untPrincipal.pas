@@ -62,7 +62,7 @@ begin
   end
   else
   begin
-    ShowMessage('Est· Pasta j· Existe.');
+    ShowMessage('Est√° Pasta j√° Existe.');
     Result := '';
     Abort;
   end;
@@ -134,10 +134,14 @@ begin
   begin
     Pasta := PastasESubPastas[i][0];
     cCaminhoSubPasta := CriarSubPasta(cCaminhoPastaPrincipal, Pasta);
-
+    
+    if Pasta = 'Docs' then
+      CriarArquivoTxT(cCaminhoSubPasta, 'Link do Docs');
+      
     if Pasta = 'Textos Form DEV' then
-      CriarArquivoTxT(cCaminhoSubPasta, pcProjeto + 'Form DEV')
-    else if Pasta = 'Textos Form HOM' then
+      CriarArquivoTxT(cCaminhoSubPasta, pcProjeto + 'Form DEV');
+      
+    if Pasta = 'Textos Form HOM' then
       CriarArquivoTxT(cCaminhoSubPasta, pcProjeto + 'Form HOM');
 
     for j := 1 to High(PastasESubPastas[i]) do
@@ -146,8 +150,6 @@ begin
       CriarSubPasta(cCaminhoSubPasta, SubPasta);
     end;
   end;
-
-  CriarArquivoTxT(CriarSubPasta(cCaminhoPastaPrincipal, 'Docs'), 'Link do Docs');
 end;
 
 
@@ -163,8 +165,8 @@ end;
 
 procedure TfrmCriarPastaProjeto.btnCriarPastaClick(Sender: TObject);
 begin
-  Validar(Trim(edtNumeroProjeto.Text) = '', '… necess·rio preencher o N˙mero do Projeto.', edtNumeroProjeto);
-  Validar(Trim(mmoNomeProjeto.Text) = '', '… necess·rio preencher o Nome do Projeto.', mmoNomeProjeto);
+  Validar(Trim(edtNumeroProjeto.Text) = '', '√â necess√°rio preencher o N√∫mero do Projeto.', edtNumeroProjeto);
+  Validar(Trim(mmoNomeProjeto.Text) = '', '√â necess√°rio preencher o Nome do Projeto.', mmoNomeProjeto);
 
   CriarPasta
 end;
