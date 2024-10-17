@@ -57,7 +57,6 @@ begin
   if(not(DirectoryExists(cNomePasta)))then
   begin
     CreateDir(cNomePasta);
-    ShowMessage('Pasta Criada com Sucesso.');
     Result := cNomePasta;
   end
   else
@@ -121,23 +120,27 @@ var
   i, j: Integer;
 begin
   cCaminhoPastaPrincipal := CriarPastaPrincipal;
-  PastasESubPastas := [
-                       ['Docs', 'Prints']
-                      ,['Imagens Adicionadas No Projeto']
-                      ,['Referencias', 'Prints', 'Tabelas']
-                      ,['Scripts SQL']
-                      ,['Textos Form DEV']
-                      ,['Textos Form HOM']
-                      ];
+  PastasESubPastas       := [
+                             ['Docs', 'Prints']
+                            ,['Imagens Adicionadas No Projeto']
+                            ,['Referencias', 'Prints', 'Tabelas']
+                            ,['Scripts SQL']
+                            ,['Textos Form DEV']
+                            ,['Textos Form HOM']
+                            ];
 
   for i := Low(PastasESubPastas) to High(PastasESubPastas) do
   begin
-    Pasta := PastasESubPastas[i][0];
+    Pasta            := PastasESubPastas[i][0];
     cCaminhoSubPasta := CriarSubPasta(cCaminhoPastaPrincipal, Pasta);
 
+    if Pasta = 'Docs' then
+      CriarArquivoTxT(cCaminhoSubPasta, 'Link do Docs');
+
     if Pasta = 'Textos Form DEV' then
-      CriarArquivoTxT(cCaminhoSubPasta, pcProjeto + 'Form DEV')
-    else if Pasta = 'Textos Form HOM' then
+      CriarArquivoTxT(cCaminhoSubPasta, pcProjeto + 'Form DEV');
+
+    if Pasta = 'Textos Form HOM' then
       CriarArquivoTxT(cCaminhoSubPasta, pcProjeto + 'Form HOM');
 
     for j := 1 to High(PastasESubPastas[i]) do
@@ -147,9 +150,8 @@ begin
     end;
   end;
 
-  CriarArquivoTxT(CriarSubPasta(cCaminhoPastaPrincipal, 'Docs'), 'Link do Docs');
+  ShowMessage('Pasta Criada com Sucesso.');
 end;
-
 
 procedure TfrmCriarPastaProjeto.Validar(lCondicao: Boolean; cMensagem: String; oComponente: TWinControl);
 begin
