@@ -4,7 +4,7 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, JvExStdCtrls, JvMemo;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, JvExStdCtrls, JvMemo, System.IOUtils, System.Types;
 
 type
   TfrmCriarPastaProjeto = class(TForm)
@@ -16,6 +16,7 @@ type
     edtDiretorio: TEdit;
     lblDiretorio: TLabel;
     lblDesenvolvedor: TLabel;
+    lblQtdProjetosCaminho: TLabel;
     procedure FormShow(Sender: TObject);
     procedure edtDiretorioKeyPress(Sender: TObject; var Key: Char);
     procedure edtNumeroProjetoKeyPress(Sender: TObject; var Key: Char);
@@ -26,12 +27,15 @@ type
   private
     plQuebraLinha: Boolean;
     pcProjeto: String;
+    piQuantidadeProjetos: Integer;
     function CriarPastaPrincipal: String;
     function CriarSubPasta(cCaminhoPastaPrincipal, cNomeSubPasta: String): String;
     procedure CriarArquivoTxT(cCaminho, cNomeArquivoTxT: String);
     procedure LimparCampos;
     procedure CriarPasta;
     procedure Validar(lCondicao: Boolean; cMensagem: String; oComponente: TWinControl);
+    procedure QuantidadesDeProjetos(cDiretorio: String);
+    function StrDynArrayToTArrayString(const AStringDynArray: TStringDynArray): TArray<string>;
     { Private declarations }
 
   public
@@ -67,6 +71,25 @@ begin
   end;
 
   LimparCampos;
+end;
+
+procedure TfrmCriarPastaProjeto.QuantidadesDeProjetos(cDiretorio: String);
+var
+  aPasta: TArray<string>;
+begin
+  aPasta := StrDynArrayToTArrayString(TDirectory.GetDirectories(cDiretorio, '*', TSearchOption.soTopDirectoryOnly));
+
+  lblQtdProjetosCaminho.Caption := Format('Possui %d Projetos nesse Caminho.', [Length(aPasta)]);
+end;
+
+function TfrmCriarPastaProjeto.StrDynArrayToTArrayString(const AStringDynArray: TStringDynArray): TArray<string>;
+var
+  i: Integer;
+begin
+  SetLength(Result, Length(AStringDynArray));
+
+  for i := 0 to High(AStringDynArray) do
+    Result[i] := AStringDynArray[i];
 end;
 
 procedure TfrmCriarPastaProjeto.LimparCampos;
@@ -151,6 +174,7 @@ begin
   end;
 
   ShowMessage('Pasta Criada com Sucesso.');
+  QuantidadesDeProjetos(edtDiretorio.Text);
 end;
 
 procedure TfrmCriarPastaProjeto.Validar(lCondicao: Boolean; cMensagem: String; oComponente: TWinControl);
@@ -168,7 +192,7 @@ begin
   Validar(Trim(edtNumeroProjeto.Text) = '', 'É necessário preencher o Número do Projeto.', edtNumeroProjeto);
   Validar(Trim(mmoNomeProjeto.Text) = '', 'É necessário preencher o Nome do Projeto.', mmoNomeProjeto);
 
-  CriarPasta
+  CriarPasta;
 end;
 
 procedure TfrmCriarPastaProjeto.CriarArquivoTxT(cCaminho, cNomeArquivoTxT: String);
@@ -191,7 +215,8 @@ end;
 procedure TfrmCriarPastaProjeto.FormShow(Sender: TObject);
 begin
   LimparCampos;
-  edtDiretorio.Text := ExtractFilePath(ParamStr(0));
+  edtDiretorio.Text             := ExtractFilePath(ParamStr(0));
+  QuantidadesDeProjetos(edtDiretorio.Text);
 end;
 
 end.

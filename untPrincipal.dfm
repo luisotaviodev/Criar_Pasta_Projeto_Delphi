@@ -2,7 +2,7 @@ object frmCriarPastaProjeto: TfrmCriarPastaProjeto
   Left = 0
   Top = 0
   Caption = 'Criar Pasta Projeto'
-  ClientHeight = 311
+  ClientHeight = 354
   ClientWidth = 389
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -58,10 +58,23 @@ object frmCriarPastaProjeto: TfrmCriarPastaProjeto
   end
   object lblDesenvolvedor: TLabel
     Left = 8
-    Top = 292
+    Top = 330
     Width = 178
     Height = 16
     Caption = 'Desenvolvido por: Luis Almeida'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -13
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+  end
+  object lblQtdProjetosCaminho: TLabel
+    Left = 8
+    Top = 307
+    Width = 208
+    Height = 16
+    Caption = 'Possui 1000 Projetos nesse caminho'
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
     Font.Height = -13
