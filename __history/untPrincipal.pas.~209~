@@ -58,9 +58,8 @@ var
 begin
   Result     := '';
   pcProjeto  := Format('Projeto #%s - ', [edtNumeroProjeto.Text]);
-  cNomePasta := ExtractFilePath(ParamStr(0)) + Format('%s %s', [pcProjeto, UpperCase(RemoverCaracteresEspeciais(mmoNomeProjeto.Text))]);
-
-  Validar(DirectoryExists(cNomePasta), 'Essa Pasta já existe.', mmoNomeProjeto);
+  cNomePasta := ExtractFilePath(ParamStr(0)) + Format('%s %s', [edtNumeroProjeto.Text, UpperCase(RemoverCaracteresEspeciais(mmoNomeProjeto.Text))]);
+  Validar(DirectoryExists(cNomePasta), 'Essa Pasta já existe.');
   LimparCampos;
 
   CreateDir(cNomePasta);
@@ -164,7 +163,6 @@ begin
 
     if Pasta = 'Textos Form HOM' then
       CriarArquivoTxT(cCaminhoSubPasta, pcProjeto + 'Form HOM');
-
 
     for j := 1 to High(PastasESubPastas[i]) do
     begin
