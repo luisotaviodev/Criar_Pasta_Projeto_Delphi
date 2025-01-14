@@ -1,0 +1,228 @@
+unit untPrincipal;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, JvExStdCtrls, JvMemo, System.IOUtils, System.Types;
+
+type
+  TfrmCriarPastaProjeto = class(TForm)
+    edtNumeroProjeto: TEdit;
+    mmoNomeProjeto: TJvMemo;
+    lblNumeroProjeto: TLabel;
+    lblNomeProjeto: TLabel;
+    btnCriarPasta: TButton;
+    edtDiretorio: TEdit;
+    lblDiretorio: TLabel;
+    lblDesenvolvedor: TLabel;
+    lblQtdProjetosCaminho: TLabel;
+    procedure FormShow(Sender: TObject);
+    procedure edtDiretorioKeyPress(Sender: TObject; var Key: Char);
+    procedure edtNumeroProjetoKeyPress(Sender: TObject; var Key: Char);
+    procedure mmoNomeProjetoKeyPress(Sender: TObject; var Key: Char);
+    procedure mmoNomeProjetoKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure btnCriarPastaClick(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+  private
+    plQuebraLinha: Boolean;
+    pcProjeto: String;
+    piQuantidadeProjetos: Integer;
+    function CriarPastaPrincipal: String;
+    function CriarSubPasta(cCaminhoPastaPrincipal, cNomeSubPasta: String): String;
+    procedure CriarArquivoTxT(cCaminho, cNomeArquivoTxT: String);
+    procedure LimparCampos;
+    procedure CriarPasta;
+    procedure Validar(lCondicao: Boolean; cMensagem: String; oComponente: TWinControl);
+    procedure QuantidadesDeProjetos(cDiretorio: String);
+    function StrDynArrayToTArrayString(const AStringDynArray: TStringDynArray): TArray<string>;
+    function RemoverCaracteresEspeciais(cTexto): String;
+    { Private declarations }
+
+  public
+    { Public declarations }
+  end;
+
+var
+  frmCriarPastaProjeto: TfrmCriarPastaProjeto;
+
+implementation
+
+{$R *.dfm}
+
+{ TfrmCriarPastaProjeto }
+
+function TfrmCriarPastaProjeto.CriarPastaPrincipal: String;
+var
+  cNomePasta: String;
+begin
+  pcProjeto  := Format('Projeto #%s - ', [edtNumeroProjeto.Text]);
+  cNomePasta := ExtractFilePath(ParamStr(0)) + Format('Projeto #%s - ', [edtNumeroProjeto.Text]) + UpperCase(mmoNomeProjeto.Text);
+
+  if(not(DirectoryExists(cNomePasta)))then
+  begin
+    CreateDir(cNomePasta);
+    Result := cNomePasta;
+  end
+  else
+  begin
+    ShowMessage('Está Pasta já Existe.');
+    Result := '';
+    Abort;
+  end;
+
+  LimparCampos;
+end;
+
+function TfrmCriarPastaProjeto.RemoverCaracteresEspeciais(cTexto): String;
+begin
+
+end;
+
+procedure TfrmCriarPastaProjeto.QuantidadesDeProjetos(cDiretorio: String);
+var
+  aPasta: TArray<string>;
+begin
+  aPasta := StrDynArrayToTArrayString(TDirectory.GetDirectories(cDiretorio, '*', TSearchOption.soTopDirectoryOnly));
+
+  lblQtdProjetosCaminho.Caption := Format('Possui %d Projetos nesse Caminho.', [Length(aPasta)]);
+end;
+
+function TfrmCriarPastaProjeto.StrDynArrayToTArrayString(const AStringDynArray: TStringDynArray): TArray<string>;
+var
+  i: Integer;
+begin
+  SetLength(Result, Length(AStringDynArray));
+
+  for i := 0 to High(AStringDynArray) do
+    Result[i] := AStringDynArray[i];
+end;
+
+procedure TfrmCriarPastaProjeto.LimparCampos;
+begin
+  edtNumeroProjeto.Text := '';
+  mmoNomeProjeto.Text   := '';
+  edtNumeroProjeto.SetFocus;
+end;
+
+procedure TfrmCriarPastaProjeto.mmoNomeProjetoKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+begin
+  plQuebraLinha := ((Key = VK_RETURN)and(ssShift in Shift));
+end;
+
+procedure TfrmCriarPastaProjeto.mmoNomeProjetoKeyPress(Sender: TObject; var Key: Char);
+begin
+  if((Key = #13)and(not(plQuebraLinha)))then
+    SelectNext(ActiveControl as TWinControl,True,True);
+end;
+
+function TfrmCriarPastaProjeto.CriarSubPasta(cCaminhoPastaPrincipal, cNomeSubPasta: String): String;
+var
+  cCaminho: String;
+begin
+  cCaminho := cCaminhoPastaPrincipal + '\' + cNomeSubPasta;
+  CreateDir(cCaminho);
+
+  Result := cCaminho;
+end;
+
+procedure TfrmCriarPastaProjeto.edtDiretorioKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = #13 then
+    SelectNext(ActiveControl as TWinControl,True,True);
+end;
+
+procedure TfrmCriarPastaProjeto.edtNumeroProjetoKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = #13 then
+    SelectNext(ActiveControl as TWinControl,True,True);
+
+  if(not(key in ['0'..'9', #8]))then
+    key := #0;
+end;
+
+procedure TfrmCriarPastaProjeto.CriarPasta;
+var
+  cCaminhoPastaPrincipal, cCaminhoSubPasta: String;
+  Pasta, SubPasta: String;
+  PastasESubPastas: array of array of String;
+  i, j: Integer;
+begin
+  cCaminhoPastaPrincipal := CriarPastaPrincipal;
+  PastasESubPastas       := [
+                             ['Docs', 'Prints']
+                            ,['Imagens Adicionadas No Projeto']
+                            ,['Referencias', 'Prints', 'Tabelas']
+                            ,['Scripts SQL']
+                            ,['Textos Form DEV']
+                            ,['Textos Form HOM']
+                            ];
+
+  for i := Low(PastasESubPastas) to High(PastasESubPastas) do
+  begin
+    Pasta            := PastasESubPastas[i][0];
+    cCaminhoSubPasta := CriarSubPasta(cCaminhoPastaPrincipal, Pasta);
+
+    if Pasta = 'Docs' then
+      CriarArquivoTxT(cCaminhoSubPasta, 'Link do Docs');
+
+    if Pasta = 'Textos Form DEV' then
+      CriarArquivoTxT(cCaminhoSubPasta, pcProjeto + 'Form DEV');
+
+    if Pasta = 'Textos Form HOM' then
+      CriarArquivoTxT(cCaminhoSubPasta, pcProjeto + 'Form HOM');
+
+    for j := 1 to High(PastasESubPastas[i]) do
+    begin
+      SubPasta := PastasESubPastas[i][j];
+      CriarSubPasta(cCaminhoSubPasta, SubPasta);
+    end;
+  end;
+
+  ShowMessage('Pasta Criada com Sucesso.');
+  QuantidadesDeProjetos(edtDiretorio.Text);
+end;
+
+procedure TfrmCriarPastaProjeto.Validar(lCondicao: Boolean; cMensagem: String; oComponente: TWinControl);
+begin
+  if(lCondicao)then
+  begin
+    ShowMessage(cMensagem);
+    oComponente.SetFocus;
+    Abort;
+  end;
+end;
+
+procedure TfrmCriarPastaProjeto.btnCriarPastaClick(Sender: TObject);
+begin
+  Validar(Trim(edtNumeroProjeto.Text) = '', 'É necessário preencher o Número do Projeto.', edtNumeroProjeto);
+  Validar(Trim(mmoNomeProjeto.Text) = '', 'É necessário preencher o Nome do Projeto.', mmoNomeProjeto);
+
+  CriarPasta;
+end;
+
+procedure TfrmCriarPastaProjeto.CriarArquivoTxT(cCaminho, cNomeArquivoTxT: String);
+var
+  txtArquivo: TextFile;
+begin
+  AssignFile(txtArquivo, cCaminho + '\' + cNomeArquivoTxT + '.txt');
+  Rewrite(txtArquivo);
+
+  Writeln(txtArquivo, '');
+  CloseFile(txtArquivo);
+end;
+
+procedure TfrmCriarPastaProjeto.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  if(Key = #27)then
+    Close;
+end;
+
+procedure TfrmCriarPastaProjeto.FormShow(Sender: TObject);
+begin
+  LimparCampos;
+  edtDiretorio.Text             := ExtractFilePath(ParamStr(0));
+  QuantidadesDeProjetos(edtDiretorio.Text);
+end;
+
+end.

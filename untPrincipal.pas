@@ -4,7 +4,7 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, JvExStdCtrls, JvMemo, System.IOUtils, System.Types;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, JvExStdCtrls, JvMemo, System.IOUtils, System.Types, System.RegularExpressions;
 
 type
   TfrmCriarPastaProjeto = class(TForm)
@@ -36,6 +36,7 @@ type
     procedure Validar(lCondicao: Boolean; cMensagem: String; oComponente: TWinControl);
     procedure QuantidadesDeProjetos(cDiretorio: String);
     function StrDynArrayToTArrayString(const AStringDynArray: TStringDynArray): TArray<string>;
+    function RemoverCaracteresEspeciais(cTexto: String): String;
     { Private declarations }
 
   public
@@ -56,7 +57,7 @@ var
   cNomePasta: String;
 begin
   pcProjeto  := Format('Projeto #%s - ', [edtNumeroProjeto.Text]);
-  cNomePasta := ExtractFilePath(ParamStr(0)) + Format('Projeto #%s - ', [edtNumeroProjeto.Text]) + UpperCase(mmoNomeProjeto.Text);
+  cNomePasta := ExtractFilePath(ParamStr(0)) + Format('Projeto #%s - ', [edtNumeroProjeto.Text]) + UpperCase(RemoverCaracteresEspeciais(mmoNomeProjeto.Text));
 
   if(not(DirectoryExists(cNomePasta)))then
   begin
@@ -71,6 +72,11 @@ begin
   end;
 
   LimparCampos;
+end;
+
+function TfrmCriarPastaProjeto.RemoverCaracteresEspeciais(cTexto: String): String;
+begin
+  Result := TRegEx.Replace(cTexto, '[^a-zA-Z0-9\s]', '');
 end;
 
 procedure TfrmCriarPastaProjeto.QuantidadesDeProjetos(cDiretorio: String);
